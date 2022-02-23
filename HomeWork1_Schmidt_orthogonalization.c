@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<math.h>
 
-#define n 3  //n is the dimension of the space
+#define n 4  //n is the dimension of the space
 #define eps 0.01  //eps is the permission error
 typedef double MATRIX[20][20];
 
@@ -12,6 +12,7 @@ void Matrix_random_generation(MATRIX vec,int dimension);
 void Matrix_tran(MATRIX vec_1,MATRIX vec_2,int dimension);
 void Matrix_product(MATRIX vec_1,MATRIX vec_2,MATRIX vec_result,int dimension);
 double Matrix_scalar_product(MATRIX vector_group_1,MATRIX vector_group_2,int dimension,int a,int b);
+double Matrix_det(MATRIX vec, int dimension);
 int exam(MATRIX vec,int dimension);
 
 int main()
@@ -20,6 +21,11 @@ int main()
     Matrix_random_generation(vec,n);// generate a random matrix with n dimensions
     printf("\nthe initial matrix is: \n");
     Matrix_print(vec,n);
+
+    //exam weather the matrix can be expanded into space Rn
+    double a=Matrix_det(vec,n);
+    if(a==0)  printf("\nThis matrix cannot be expanded into space Rn, initialization failed\n");
+    else      printf("\n by examing we can ensure that the matrix can be expanded into space Rn. \n");
 
 
     Schmidt_orthogonalization(vec,n);// make vec an orthonormal matrix by the schmidt's way
@@ -163,4 +169,38 @@ int exam(MATRIX vec,int dimension)
 
     if(bull==0)  return 1;
     else  return 0;
+}
+
+double Matrix_det(MATRIX vec, int dimension)
+{
+    double b[20][20] = {{0}}; /*定义数组b并初始化*/
+    int i = 0, j = 0; /*i,j为行与列,sum为行列式的值*/
+    double sum=0;
+    int x = 0, c = 0, p = 0; /*用x判断加与减,c,p为中间变量*/
+    if (dimension == 1)
+        return vec[0][0];
+    for (i = 0; i < dimension; i++) /*此处大循环实现将余子式存入数组b中*/
+    {
+        for (c = 0; c < dimension - 1; c++)
+        {
+            for (j = 0; j < dimension - 1; j++)
+            {
+                if (c < i) { /*借助c判断每行的移动方法*/
+                    p = 0; /*当p=0时,行列式只向左移,即消去对应的第一列的数*/
+                }
+                else { /*否则行列式左移后再上移*/
+                    p = 1;
+                }
+                b[c][j] = vec[c + p][j + 1];
+            }
+        }
+        if (i % 2 == 0) { /*i+j（此时j=0,故只考虑i）为偶数,加法预算*/
+            x = 1;
+        }
+        else { /*i+j为奇数,减法运算*/
+            x = (-1);
+        }
+        sum += vec[i][0] * Matrix_det(b,dimension - 1) * x; /*计算行列式的值*/
+    }
+    return sum; /*将值返回*/
 }

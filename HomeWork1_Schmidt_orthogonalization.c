@@ -2,7 +2,7 @@
 #include<stdlib.h>
 #include<math.h>
 
-#define n 4  //n is the dimension of the space
+#define n 5 //n is the dimension of the space
 #define eps 0.01  //eps is the permission error
 typedef double MATRIX[20][20];
 
@@ -15,8 +15,11 @@ double Matrix_scalar_product(MATRIX vector_group_1,MATRIX vector_group_2,int dim
 double Matrix_det(MATRIX vec, int dimension);
 int exam(MATRIX vec,int dimension);
 
+
 int main()
 {
+
+    printf("\n the dimension of the matrix is n=%d,and n should be a natural number less than 20",n);
     MATRIX vec={0};
     Matrix_random_generation(vec,n);// generate a random matrix with n dimensions
     printf("\nthe initial matrix is: \n");
@@ -39,6 +42,40 @@ int main()
     Matrix_product(vec,vec_tran,vec_exam,n); 
     if(exam(vec_exam,n)==1)  printf("\n by examing we can ensure the matrix is orthinirmal \n"); 
     if(exam(vec_exam,n)==0)  printf("\n can not pass the examination! \n");
+
+    double x[20];
+    double u[20];
+    for(int i=0;i<=n;i++)
+    {
+        x[i]=drand48();
+    }
+
+    printf("\nwe can generate a vectory by random function\n");
+    for(int i=0;i<n;i++)
+    {
+        printf("%f \n",x[i]);
+    }
+    //consider that matrix_tran is the inverse matrix of initial matrix,we can obtain the new vectory by matrix_tran*x
+
+    double sum=0;
+    for(int i=0;i<n;i++)
+    {
+        sum=0;
+        for(int j=0;j<n;j++)
+        {
+            sum+=x[j]*vec_tran[i][j];
+        }
+        u[i]=sum;
+    }
+
+    printf("\nthe vectory can be expressed as followed based on the matrix\n");
+    for(int i=0;i<n;i++)
+    {
+        printf("%f \n",u[i]);
+    }
+
+
+    return 0;
 }
 
 

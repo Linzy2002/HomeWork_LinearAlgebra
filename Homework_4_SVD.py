@@ -113,16 +113,4 @@ if __name__ == '__main__':
     print(np.dot(U,S).dot(V))
 
 
-//print matrix aa
-void print(int n,int m,complex<double>* aa)
-{
-    for(int j = 0;j<n;j++)
-    {
-        for(int i = 0;i<m;i++)
-        {
-            cout << aa[j*m+i] << "\t";
-        }
-        cout << endl;
-    }
-    cout << endl;
-}
+
